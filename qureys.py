@@ -1,5 +1,6 @@
 from firebases import Data
 from userdatas import userdata
+import time
 
 class Qurey:
 
@@ -12,11 +13,10 @@ class Qurey:
         if problem == None : return " 텅 ~ 비었습니다."
         if type(problem) == int : return " 텅 ~ 비었습니다."
 
-        s = "추천된 문제들 ^^ \n----------------------\n"
+        s = ""
         for a,b in problem.items():
             s += b + '\n'
 
-        s += "----------------------"
         return s
 
     def clearProblem(self,problem):
@@ -27,11 +27,17 @@ class Qurey:
         Data.child("Problem").child(problem).delete()
 
     def rankingStart(self): #랭크게임 시작
+        now = time.gmtime(time.time())
+
         users = Data.child("Users").get()
         data = Data.child("rank").get()
 
         if users == None : return -1
         if data != None : return -2
+        if time != None : return -2
+
+        t = str(now.tm_year) + "-" + str(now.tm_mon) + "-" + str(now.tm_mday) + " , " + str(now.tm_hour) + ":" + str(now.tm_min)
+        Data.child("time").set(t)
 
         for a,b in users.items():
             userdata.update(a) 
@@ -43,6 +49,7 @@ class Qurey:
         data = Data.child("rank").get()
 
         if data == None : return -1
+        if time == None : return -2
 
         for a,b in data.items() :
             userdata.update(a) 
@@ -58,7 +65,7 @@ class Qurey:
         
         x.sort(key = lambda x:x[1])
 
-        ans = ""
+        ans = "시작 시간 : " + Data.child("time").get() + "\n"
         rk = 1
         for i in range(len(x) - 1,-1,-1):
             ans += str(rk) + "위 - " + x[i][0] + "님 푼 문제수 - " + str(x[i][1]) + '\n' 
@@ -71,8 +78,12 @@ class Qurey:
 
         if data == None : return -1
 
-        ans = "최종순위 발표 : \n"
+        now = time.gmtime(time.time())
+        t = str(now.tm_year) + "-" + str(now.tm_mon) + "-" + str(now.tm_mday) + " , " + str(now.tm_hour) + ":" + str(now.tm_min)
+        ans = "종료 시간 : " + t + "\n"
+        ans += "최종순위 발표 : \n"
         ans += self.rankEx()
         Data.child("rank").delete()
+        Data.child("time").delete()
 
         return ans

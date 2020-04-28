@@ -65,11 +65,11 @@ class UserData :
     def reinforceItem(self,nickName,itemName,u):
         item = self.getItem(nickName,itemName)
         users = self.getUserData(nickName)
-        if users == None : return "-1"
-        if item == None : return "-2"
+        if users == None : return -1
+        if item == None : return -2
 
         if users["getReinforceCount"] == 0 :
-            return "-3"
+            return -3
 
         r = users["getReinforceCount"]
         u = min(u,r)
@@ -78,61 +78,77 @@ class UserData :
 
         rein = item[itemName]
 
-        res = ""
+        a = 0
+        b = 0
+        c = 0
         while u != 0 :
             t = random.randrange(1,1001)
             if rein == 0 :
                 if t <= 600 : 
                     rein += 1
-                    res += up + "\n"
+                    a += 1
                 else : 
-                    if t <= 900 : rein -= 1
-                    res += down + "\n"
+                    if t <= 900 : 
+                        rein -= 1
+                        c += 1
+                    b += 1
             elif rein == 1 :
                 if t <= 500 : 
                     rein  += 1
-                    res += up + "\n"
+                    a += 1
                 else :  
-                    if t <= 850 : rein -= 1
-                    res += down + "\n"
+                    if t <= 850 : 
+                        rein -= 1
+                        c += 1
+                    b += 1
                
             elif rein == 2 :          
                 if t <= 350 : 
                     rein  += 1
-                    res += up + "\n"
+                    a += 1
                 else :  
-                    if t <= 800 : rein -= 1
-                    res += down + "\n"
+                    if t <= 800 : 
+                        rein -= 1
+                        c += 1
+                    b += 1
             elif rein == 3 :
                 if t <= 300 : 
                     rein  += 1
-                    res += up + "\n"
+                    a += 1
                 else :  
-                    if t <= 700 : rein -= 1 
-                    res += down + "\n"          
+                    if t <= 700 : 
+                        rein -= 1 
+                        c += 1
+                    b += 1         
             elif rein == 4 :
                 if t <= 200 : 
                     rein  += 1
-                    res += up + "\n"
+                    a += 1
                 else :   
-                    if t <= 500 : rein -= 1
-                    res += down + "\n"
+                    if t <= 500 : 
+                        rein -= 1
+                        c += 1
+                    b += 1
          
             elif rein == 5 :
                 if t <= 10 :  
                     rein  += 1
-                    res += up + "\n"
+                    a += 1
                 else :  
-                    if t <= 400 :  rein -= 1
-                    res += down + "\n"
+                    if t <= 400 : 
+                        rein -= 1
+                        c += 1
+                    b += 1
                 
             elif rein == 6 :
                 if t <= 1 : 
                     rein  += 1
-                    res += up + "\n"
+                    a += 1
                 else :  
-                    if t <= 300 : rein -= 1
-                    res += down + "\n"
+                    if t <= 300 : 
+                        rein -= 1
+                        c += 1
+                    b += 1
             
             if rein < 0 : rein = 0
             u -= 1
@@ -140,6 +156,11 @@ class UserData :
         item[itemName] = rein 
         Data.child("Users").child(nickName).set(users)
         Data.child("Users").child(nickName).child("아이템").set(item)
+
+        res = [] 
+        res.append(a)
+        res.append(b)
+        res.append(c)
         return res
 
     def update(self,nick):
