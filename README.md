@@ -1,5 +1,4 @@
 # DisCordBot
-
 </hr>
 
 # 만든 계기
